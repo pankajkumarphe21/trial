@@ -4,9 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/stylesheets/tailwind.css">
 </head>
 <body>
-    <h1>Hi</h1>
+    <div class='text-white bg-zinc-900 w-full h-screen flex-col'>
+        <h1 class='mb-7 flex justify-center pt-5 text-3xl'>Todos List</h1>
+        <div class='h-[0.2px] bg-zinc-400'></div>
+          <h3 class='text-2xl flex justify-around mt-5 mb-6'>Sign Up Page</h3>
+          <form method='post' action='/signup'>
+            <input class='mt-5 block ml-[199px] pl-4 bg-zinc-800 py-2' type="text" name='fullname' placeholder='Enter your fullname' />
+            <input class='mt-5 block ml-[199px] pl-4 bg-zinc-800 py-2' type="text" name="username" placeholder="Enter username"/>
+            <input class='mt-5 block ml-[199px] pl-4 bg-zinc-800 py-2' type="password" name="password" placeholder="Enter password"/>
+            <input class='bg-blue-500 rounded-md py-2 px-3 ml-[199px] mt-[19px]' type="submit" value="Register"/>
+          </form>
+          <button class='bg-yellow-500 rounded-md py-2 px-3 ml-[199px] mt-[19px]'><a href="/login">Or Sign In</a></button>
+      </div>
 </body>
 </html>
