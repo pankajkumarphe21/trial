@@ -17,8 +17,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-  console.log('Hi')
-  res.send('index');
+  res.render('index');
 });
 
 app.post('/signup',async (req,res)=>{
