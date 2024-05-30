@@ -7,9 +7,6 @@ var jwt = require('jsonwebtoken');
 var bcrypt=require('bcrypt');
 var cookieParser=require('cookie-parser')
 
-
-// Serve the static files from the React app
-
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine','ejs');
 app.use(express.json());
@@ -22,27 +19,62 @@ app.get('/', (req, res) => {
 });
 
 app.post('/signup',async (req,res)=>{
-  const user=await userModel.find({username:req.body.username});
+  let {username,fullname,password}=req.body
+  const user=await userModel.find({username});
   if(user.length===0){
-    const user=await userModel.create({
-      username:req.body.username, 
-      fullname:req.body.fullname, 
-      password:req.body.password, 
+    bcrypt.genSalt(process.env.SALT || 10,(err,salt)=>{
+      bcrypt.hash(password,salt,async (err,hash)=>{
+        const user=await userModel.create({
+          username, fullname, password:hash, 
+        })
+        let token=jwt.sign({username,userid:user._id},process.env.SECRET || 'shhhhhhh');
+        res.cookie('token',token);
+        res.redirect(`/profile`);
+      })
     })
-    res.redirect(`/profile/${user._id}`)
   }
   else{
-    res.send('username already taken')
+    res.status(500).send('username already taken!')
   }
 })
 
-app.get('/profile/:id',async (req,res)=>{
-  const user=await userModel.findOne({_id:req.params.id});
-  res.render('profile',{user})
+app.get('/profile',isLoggedIn,async (req,res)=>{
+  const user=await userModel.findOne({username:req.user.username});
+  res.render('profile',{user});
 })
 
 app.get('/login',(req,res)=>{
   res.render('login')
 })
+
+app.post('/login',async (req,res)=>{
+  const {username,password} = req.body;
+  let user=await userModel.findOne({username});
+  if(!user) return res.status(500).send('Something went wrong!');
+  bcrypt.compare(password,user.password,(err,result)=>{
+    if(result){
+      let token=jwt.sign({username,userid:user._id},process.env.SECRET || 'shhhhhhh');
+      res.cookie('token',token);
+      res.redirect('/profile');
+    }
+    else{
+      res.send('Something went wrong!');
+    }
+  })
+})
+
+function isLoggedIn(req,res,next){
+  if(req.cookies.token===undefined){
+    res.redirect('/login')
+  }
+  else if(req.cookies.token===""){
+    res.redirect('/login')
+  }
+  else{
+    let data=jwt.verify(req.cookies.token,process.env.SECRET || 'shhhhhhh');
+    req.user=data;
+    next()
+  }
+}
 
 app.listen(PORT);
