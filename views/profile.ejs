@@ -7,8 +7,22 @@
     <link rel="stylesheet" href="/stylesheets/tailwind.css">
 </head>
 <body class="bg-zinc-900">
-    <div class="text-white h-screen w-full flex-col justify-center items-center">
-        <h1>Hi <%= user.username %></h1>
+    <div class="text-white w-full flex-col justify-center items-center">
+        <h1 class="text-3xl flex justify-center gap-2 pt-5">Hi <span class="text-yellow-400"><%= user.fullname %></span></h1>
+        <h2 class="text-2xl flex justify-center mt-5">username : <%= user.username %></h2>
+        <div>
+            <h1 class="text-3xl flex justify-center mt-5">Add New Note</h1>
+            <form class="ml-5" method="post" action="/notes">
+                <input placeholder="Enter your note" class="mt-16 w-64 pl-3 py-2 bg-slate-600 text-white" type="text" name="note">
+                <input class="bg-red-500 px-3 py-2" type="submit" value="Submit">
+            </form>
+        </div>
+        <p class="text-2xl flex justify-center">My Notes</p>
+        <div class="flex flex-col m-10">
+            <% user.notes.forEach((note)=>{ %>
+                <p><%= note %></p>
+            <% }) %>
+        </div>
     </div>
 </body>
 </html>

@@ -77,4 +77,15 @@ function isLoggedIn(req,res,next){
   }
 }
 
+app.post('/notes',isLoggedIn,async (req,res)=>{
+  const user=await userModel.findOne({username:req.user.username});
+  if(user){
+    user.notes.push(req.body.note);
+    await user.save();
+  }
+  else{
+    res.redirect('/login');
+  }
+})
+
 app.listen(PORT);
