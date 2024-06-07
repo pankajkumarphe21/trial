@@ -75,7 +75,8 @@
   "scripts": {
     "build:css": "postcss src/styles/tailwind.css -o public/stylesheets/tailwind.css",
     "watch:css": "postcss src/styles/tailwind.css -o public/stylesheets/tailwind.css --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm run build:css\" \"nodemon index.js\""
   },
   "keywords": [],
   "author": "Pankaj Kumar",
@@ -83,6 +84,8 @@
   "description": "",
   "devDependencies": {
     "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.3",
     "postcss": "^8.4.38",
     "postcss-cli": "^11.0.0",
     "tailwindcss": "^3.4.3"
