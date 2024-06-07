@@ -82,6 +82,7 @@ app.post('/notes',isLoggedIn,async (req,res)=>{
   if(user){
     user.notes.push(req.body.note);
     await user.save();
+    res.redirect('/profile');
   }
   else{
     res.redirect('/login');
