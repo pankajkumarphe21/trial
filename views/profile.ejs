@@ -6,7 +6,6 @@
     <title>Document</title>
     <link rel="stylesheet" href="/stylesheets/tailwind.css">
     <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 <body class="bg-zinc-900">
     <div class="text-white w-full flex-col justify-center items-center">
@@ -20,9 +19,11 @@
             </form>
         </div>
         <p class="text-2xl flex justify-center">My Notes</p>
-        <div class="flex flex-col m-10">
-            <% user.notes.forEach((note)=>{ %>
-                <p><%= note %></p>
+        <div class="flex gap-3 flex-col m-10">
+            <% user.notes.forEach((note,i)=>{ %>
+                <div class="flex  items-center">
+                    <p><%= note %></p> <form action="/note/delete/<%= i %>" method="post"><button class="bg-red-600 px-3 py-2 ml-3">Delete</button></form>
+                </div>
             <% }) %>
         </div>
     </div>

@@ -89,4 +89,25 @@ app.post('/notes',isLoggedIn,async (req,res)=>{
   }
 })
 
+app.post('/note/delete/:i',isLoggedIn,async (req,res)=>{
+  const user=await userModel.findOne({username:req.user.username});
+  if(user){
+    let notes=[];
+    for(let i=0;i<user.notes.length;i++){
+      if(i==req.params.i){
+        continue;
+      }
+      else{
+        notes.push(user.notes[i])
+      }
+    }
+    user.notes=notes;
+    await user.save();
+    res.redirect('/profile');
+  }
+  else{
+    res.redirect('/login');
+  }
+})
+
 app.listen(PORT);
