@@ -18,6 +18,13 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+app.get('/note/update/:i',isLoggedIn,async (req,res)=>{
+  const user=await userModel.findOne({username:req.user.username});
+  req.user.fullname=user.fullname;
+  let note=user.notes[req.params.i];
+  res.render('update',{user:req.user,i:req.params.i,note});
+})
+
 app.post('/signup',async (req,res)=>{
   let {username,fullname,password}=req.body
   const user=await userModel.find({username});
@@ -96,6 +103,27 @@ app.post('/note/delete/:i',isLoggedIn,async (req,res)=>{
     for(let i=0;i<user.notes.length;i++){
       if(i==req.params.i){
         continue;
+      }
+      else{
+        notes.push(user.notes[i])
+      }
+    }
+    user.notes=notes;
+    await user.save();
+    res.redirect('/profile');
+  }
+  else{
+    res.redirect('/login');
+  }
+})
+
+app.post('/note/update/:i',isLoggedIn,async (req,res)=>{
+  const user=await userModel.findOne({username:req.user.username});
+  if(user){
+    let notes=[];
+    for(let i=0;i<user.notes.length;i++){
+      if(i==req.params.i){
+        user.notes.push(req.body.note);
       }
       else{
         notes.push(user.notes[i])
